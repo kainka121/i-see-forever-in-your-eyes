@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Selection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fcfaf8;
+            --accent-color: #2c2c2c;
+            --card-bg: #ffffff;
+            --text-color: #4a4a4a;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        h1 {
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        p.subtitle {
+            font-size: 0.9em;
+            color: #888;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            width: 90%;
+            max-width: 1000px;
+            padding-bottom: 100px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .card h3 {
+            font-weight: 600;
+            font-size: 1.1em;
+            margin: 15px 0;
+        }
+
+        .btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        /* Modal Styles */
+        #modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.95);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .modal-content {
+            max-width: 400px;
+            padding: 40px;
+        }
+
+        #success-message {
+            display: none;
+            font-weight: 300;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Personal Selection</h1>
+        <p class="subtitle">Выбери то, что тебе по душе сегодня</p>
+    </header>
+
+    <div class="grid">
+        <div class="card" onclick="openModal('Цепочка SOKOLOV')">
+            <h3>Цепочка SOKOLOV</h3>
+            <p>Изящное украшение для тебя</p>
+            <button class="btn">Выбрать</button>
+        </div>
+
+        <div class="card" onclick="openModal('Ужин в Negroni')">
+            <h3>Ужин в Negroni</h3>
+            <p>Прекрасный вечер и вкусная кухня</p>
+            <button class="btn">Выбрать</button>
+        </div>
+
+        <div class="card" onclick="openModal('Сертификат на 20.000')">
+            <h3>Сертификат на 20.000</h3>
+            <p>Свобода выбора чего-то особенного</p>
+            <button class="btn">Выбрать</button>
+        </div>
+
+        <div class="card" onclick="openModal('Лабубу')">
+            <h3>Лабубу</h3>
+            <p>Милый подарок в твою коллекцию</p>
+            <button class="btn">Выбрать</button>
+        </div>
+
+        <div class="card" onclick="openModal('Вечерняя прогулка')">
+            <h3>Вечерняя прогулка</h3>
+            <p>Время, когда город затихает</p>
+            <button class="btn">Выбрать</button>
+        </div>
+
+        <div class="card" onclick="openModal('Разговор на двоих')">
+            <h3>Разговор на двоих</h3>
+            <p>Самое важное — просто поговорить</p>
+            <button class="btn">Выбрать</button>
+        </div>
+    </div>
+
+    <div id="modal">
+        <div class="modal-content">
+            <h2 id="selected-item-title"></h2>
+            <p>Ты уверена в своем выборе?</p>
+            
+            <form action="https://formspree.io/f/xdalkkbp" method="POST" id="gift-form">
+                <input type="hidden" name="choice" id="choice-input">
+                <button type="submit" class="btn">Да, хочу это</button>
+                <p onclick="closeModal()" style="cursor:pointer; margin-top:20px; font-size: 0.8em; text-decoration: underline;">Назад</p>
+            </form>
+        </div>
+    </div>
+
+    <div id="success-message" style="position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:200; display:none; flex-direction:column; justify-content:center; align-items:center;">
+        <h2>Выбор сделан</h2>
+        <p>Скоро увидимся.</p>
+    </div>
+
+    <script>
+        const modal = document.getElementById('modal');
+        const title = document.getElementById('selected-item-title');
+        const input = document.getElementById('choice-input');
+        const form = document.getElementById('gift-form');
+        const success = document.getElementById('success-message');
+
+        function openModal(item) {
+            modal.style.display = 'flex';
+            title.innerText = item;
+            input.value = item;
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            const data = new FormData(form);
+            await fetch(form.action, {
+                method: 'POST',
+                body: data,
+                headers: { 'Accept': 'application/json' }
+            });
+            modal.style.display = 'none';
+            success.style.display = 'flex';
+        };
+    </script>
+</body>
+</html>
